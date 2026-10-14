@@ -1,0 +1,517 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   STONE — the design system.
+
+   Reference: the "tarn" site in E:\tarn.mp4. Calm, matte, expensive:
+   off-white stone surfaces, bronze/cream accents, moss green, near-black ink,
+   huge two-tone headlines (ghost grey + near-black), letter-spaced monospace
+   micro-labels, soft glass panels floating over gradient or photographic tiles.
+
+   Every colour is a Tailwind theme variable, so the palette toggle below can
+   re-declare the same variables on <html data-palette="…"> and every utility
+   in the whole site follows — including the dark palette.
+   ========================================================================== */
+
+@theme {
+  /* ------------------------------------------------------------- surfaces */
+  --color-shell: #fafafa; /* page base */
+  --color-shell-2: #f3f3f1; /* alternating band */
+  --color-shell-3: #eaeae8; /* deeper band / hero floor */
+  --color-panel: #ffffff; /* cards and panels */
+  --color-panel-2: #f5f5f4; /* inset wells */
+  --color-parchment: #ece5c8; /* the cream column */
+  --color-butter: #f5e2c1; /* the cream accent pill */
+
+  /* ------------------------------------------------------------------ ink */
+  --color-ink: #141412;
+  --color-ink-2: #4a4a46;
+  --color-ink-soft: #7c7c7a;
+  --color-ink-faint: #b8b8b6; /* the "ghost" half of every headline */
+  --color-night: #111111; /* the sticky header's dark state */
+  --color-night-2: #2a2a2a;
+
+  /* -------------------------------------------------------------- accents */
+  --color-bronze: #78552f;
+  --color-bronze-lit: #e2c69f;
+  --color-moss: #8fa05a;
+  --color-ochre: #c89b5f;
+  --color-live: #e2622a;
+
+  /* ----------------------------------------------- glass (palette aware) */
+  --color-glass: rgba(255, 255, 255, 0.55);
+  --color-glass-edge: rgba(255, 255, 255, 0.65);
+  --color-glass-dim: rgba(255, 255, 255, 0.22);
+  --color-glass-dim-edge: rgba(255, 255, 255, 0.34);
+
+  /* ---- constants: content sitting on photography, identical everywhere -- */
+  --color-on-photo: #ffffff;
+  --color-on-photo-soft: rgba(255, 255, 255, 0.76);
+  --color-veil: rgba(255, 255, 255, 0.2);
+  --color-veil-edge: rgba(255, 255, 255, 0.32);
+  /* Cards that float over photographs stay white in every palette, so their
+     text needs an ink that never flips either. */
+  --color-ink-fixed: #141412;
+  --color-ink-fixed-soft: #6f6d68;
+  --color-panel-fixed: rgba(255, 255, 255, 0.92);
+
+  /* ----------------------------------------------------------------- type */
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  /* ---------------------------------------------------------------- radii */
+  --radius-chip: 10px;
+  --radius-card: 16px;
+  --radius-float: 18px;
+  --radius-panel: 20px;
+
+  /* -------------------------------------------------------------- shadows */
+  --shadow-soft: 0 24px 60px rgba(17, 17, 17, 0.08);
+  --shadow-lift: 0 8px 24px rgba(17, 17, 17, 0.1);
+  --shadow-deep: 0 44px 90px -34px rgba(17, 17, 17, 0.3);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  /* --------------------------------------------------------------- motion */
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee-slow: marquee 68s linear infinite;
+  --animate-drift: drift 22s ease-in-out infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-breathe: breathe 20s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 34s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+/* Extremely slow scale on photography — stands in for the reference site's
+   living nature loops until real footage is dropped in (see README). */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1.02);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash-drift {
+  to {
+    background-position-x: 32px;
+  }
+}
+
+/* ==========================================================================
+   PALETTES
+   ========================================================================== */
+
+/* Warm paper — same structure, a touch of linen in the whites. */
+html[data-palette="linen"] {
+  --color-shell: #faf7f1;
+  --color-shell-2: #f3efe6;
+  --color-shell-3: #e9e4d8;
+  --color-panel: #fffdf8;
+  --color-panel-2: #f4f0e7;
+  --color-parchment: #eadfc0;
+  --color-butter: #f4dfb6;
+  --color-ink-faint: #b6b0a4;
+  --color-glass: rgba(255, 253, 248, 0.58);
+  --color-glass-edge: rgba(255, 255, 255, 0.6);
+}
+
+/* Dark stone — every token flips, photography sections are unaffected. */
+html[data-palette="dusk"] {
+  --color-shell: #131312;
+  --color-shell-2: #191918;
+  --color-shell-3: #1f1f1d;
+  --color-panel: #1c1c1a;
+  --color-panel-2: #242422;
+  --color-parchment: #332c1f;
+  --color-butter: #3d3423;
+  --color-ink: #f3f2ef;
+  --color-ink-2: #cbc9c2;
+  --color-ink-soft: #98968f;
+  --color-ink-faint: #55544e;
+  --color-night: #0c0c0b;
+  --color-night-2: #2c2c2a;
+  --color-bronze: #b3844f;
+  --color-bronze-lit: #6b5334;
+  --color-moss: #a5b56b;
+  --color-glass: rgba(28, 28, 26, 0.55);
+  --color-glass-edge: rgba(255, 255, 255, 0.12);
+  --color-glass-dim: rgba(28, 28, 26, 0.45);
+  --color-glass-dim-edge: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--color-shell);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-butter);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Hide the native cursor whenever the custom one is alive (fine pointers only). */
+@media (hover: hover) and (pointer: fine) {
+  html[data-cursor="on"],
+  html[data-cursor="on"] * {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: smooth;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ==========================================================================
+   TYPE
+   ========================================================================== */
+
+/* Headlines: one clean grotesque, tight tracking, tight leading, sentence case. */
+.display {
+  font-family: var(--font-sans);
+  font-weight: 450;
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.display-sm {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.018em;
+}
+
+/* The reference's signature: line one in ghost grey, line two in near-black. */
+.ghost {
+  color: var(--color-ink-faint);
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+}
+
+.micro {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.micro-xs {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   SURFACES
+   ========================================================================== */
+
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
+  border: 1px solid var(--color-glass-edge);
+}
+
+/* Lighter veil that only ever sits on top of photography. */
+.glass-photo {
+  background: var(--color-veil);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid var(--color-veil-edge);
+}
+
+.hairline {
+  border-color: color-mix(in oklab, var(--color-ink) 12%, transparent);
+}
+
+/* The one page gutter everything shares — ~1200px of content at 1280 wide. */
+.wrap {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1240px;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+.rule {
+  border-top: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+}
+
+/* Feathers a photograph into the page so it reads as a cut-out subject. */
+.feather {
+  -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 58%, transparent 100%);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  padding: 0.72rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.pill-lg {
+  padding: 0.95rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent);
+  padding: 0.32rem 0.62rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tile {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.card {
+  border-radius: var(--radius-card);
+  background: var(--color-panel);
+  border: 1px solid color-mix(in oklab, var(--color-ink) 8%, transparent);
+}
+
+.float {
+  border-radius: var(--radius-float);
+  box-shadow: var(--shadow-lift);
+}
+
+.panel {
+  border-radius: var(--radius-panel);
+}
+
+/* Dashed rule used above the live activity rail. */
+.rail-dash {
+  height: 1px;
+  background-image: linear-gradient(90deg, currentColor 0 8px, transparent 8px 16px);
+  background-size: 16px 1px;
+  background-repeat: repeat-x;
+  animation: dash-drift 3.4s linear infinite;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: var(--animate-marquee);
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Lifts a card on hover (fine pointers only). */
+@media (hover: hover) and (pointer: fine) {
+  .lift {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-deep);
+  }
+}
+
+/* ==========================================================================
+   FORM CONTROLS (floating labels)
+   ========================================================================== */
+
+.field {
+  position: relative;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 22%, transparent);
+  padding: 1.4rem 0 0.6rem;
+  font-size: 1rem;
+  color: var(--color-ink);
+  outline: none;
+}
+.field input:focus,
+.field textarea:focus {
+  border-bottom-color: var(--color-ink);
+}
+.field label {
+  position: absolute;
+  left: 0;
+  top: 1.35rem;
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.22s;
+}
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label {
+  transform: translateY(-1.25rem) scale(0.72);
+  color: var(--color-ink);
+}
+
+/* ==========================================================================
+   CUSTOM CURSOR — a thin ring that grows into a labelled disc
+   ========================================================================== */
+
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .cursor-layer {
+    display: block;
+  }
+}
+
+.cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in oklab, var(--color-ink) 45%, transparent);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.4s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.4s, border-color 0.4s, opacity 0.3s;
+}
+.cursor-ring[data-active="true"] {
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  background: var(--color-ink);
+  border-color: transparent;
+}
+.cursor-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-shell);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.28s, transform 0.28s, color 0.4s;
+}
+.cursor-ring[data-active="true"] .cursor-label {
+  opacity: 1;
+  transform: scale(1);
+}
+.cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 999px;
+  background: var(--color-ink);
+  will-change: transform;
+  transition: background-color 0.4s;
+}
+.cursor-ring[data-active="true"] ~ .cursor-dot {
+  background: transparent;
+}
